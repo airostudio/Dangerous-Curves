@@ -15,11 +15,11 @@ export default function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center">
           <Image
-            src="/1774418181188.png"
+            src="/logo.png"
             alt="Dangerous Curves"
-            width={96}
-            height={96}
-            className="h-20 w-20 object-contain sm:h-24 sm:w-24"
+            width={150}
+            height={150}
+            className="h-[100px] w-[100px] object-contain lg:h-[150px] lg:w-[150px]"
           />
         </Link>
 
