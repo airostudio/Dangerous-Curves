@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, X, Flame } from "lucide-react";
+import Image from "next/image";
+import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useState } from "react";
 
@@ -12,16 +13,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b-2 border-cherry bg-charcoal text-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <Flame className="h-7 w-7 text-cherry" />
-          <div>
-            <p className="font-rockabilly text-lg leading-tight tracking-tight sm:text-xl">
-              Dangerous Curves
-            </p>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-warm-gray">
-              Vintage &amp; Rockabilly
-            </p>
-          </div>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/1774418181188.png"
+            alt="Dangerous Curves"
+            width={56}
+            height={56}
+            className="h-14 w-14 object-contain"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm font-bold uppercase tracking-wider lg:flex">
