@@ -5,15 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/store/Header";
 import Footer from "@/components/store/Footer";
 import ProductCard from "@/components/store/ProductCard";
-import { getDb } from "@/lib/db";
-import type { Product } from "@/lib/types";
+import { getFeaturedProducts } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
-
-function getFeaturedProducts(): Product[] {
-  const db = getDb();
-  return db.prepare("SELECT * FROM products WHERE featured = 1 ORDER BY created_at DESC LIMIT 6").all() as Product[];
-}
 
 export default function HomePage() {
   const featured = getFeaturedProducts();
@@ -22,7 +16,7 @@ export default function HomePage() {
     <>
       <Header />
       <main className="flex-1">
-        {/* Hero Section */}
+        {/* Hero */}
         <section className="relative overflow-hidden border-b-2 border-cherry bg-charcoal text-white">
           <div className="bg-pinstripe absolute inset-0 opacity-30" />
           <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
@@ -92,7 +86,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Featured Products */}
+        {/* Featured */}
         <section className="bg-pinstripe mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mb-8 flex items-end justify-between">
             <div>
@@ -100,9 +94,7 @@ export default function HomePage() {
               <h2 className="font-rockabilly mt-1 text-3xl sm:text-4xl">Featured Picks</h2>
             </div>
             <Button variant="ghost" asChild>
-              <Link href="/store">
-                View All <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
+              <Link href="/store">View All <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -127,9 +119,7 @@ export default function HomePage() {
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 {["Rockabilly", "Pin-Up", "50s Greaser", "80s Glam", "Vintage Denim"].map((tag) => (
-                  <Badge key={tag} variant="outline" className="border-warm-gray/30 text-warm-gray">
-                    {tag}
-                  </Badge>
+                  <Badge key={tag} variant="outline" className="border-warm-gray/30 text-warm-gray">{tag}</Badge>
                 ))}
               </div>
             </div>

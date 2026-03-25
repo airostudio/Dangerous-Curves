@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { updateProduct, deleteProduct } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -10,12 +10,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   const body = await request.json();
   const { name, description, price, category, size, era, image_url, stock, featured } = body;
 
-  const db = getDb();
-  db.prepare(`
-    UPDATE products SET name=?, description=?, price=?, category=?, size=?, era=?, image_url=?, stock=?, featured=?
-    WHERE id=?
-  `).run(name, description || "", price, category, size || "", era || "", image_url || "", stock || 0, featured || 0, parseInt(id));
+  const ok = updateProduct(parseInt(id), {
+    name, description: description || "", price, category,
+    size: size || "", era: era || "", image_url: image_url || "",
+    stock: stock || 0, featured: featured || 0,
+  });
 
+  if (!ok) return NextResponse.json({ error: "Product not found" }, { status: 404 });
   return NextResponse.json({ success: true });
 }
 
@@ -24,8 +25,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const db = getDb();
-  db.prepare("DELETE FROM products WHERE id = ?").run(parseInt(id));
-
+  deleteProduct(parseInt(id));
   return NextResponse.json({ success: true });
 }

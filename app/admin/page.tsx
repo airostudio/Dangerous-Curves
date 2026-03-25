@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { getStats, getLowStockProducts, getAllOrders } from "@/lib/db";
 import { Package, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 
@@ -10,17 +10,9 @@ export default async function AdminDashboard() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const db = getDb();
-  const productCount = (db.prepare("SELECT COUNT(*) as count FROM products").get() as { count: number }).count;
-  const orderCount = (db.prepare("SELECT COUNT(*) as count FROM orders").get() as { count: number }).count;
-  const revenue = (db.prepare("SELECT COALESCE(SUM(total), 0) as total FROM orders").get() as { total: number }).total;
-  const lowStock = (db.prepare("SELECT COUNT(*) as count FROM products WHERE stock <= 1 AND stock > 0").get() as { count: number }).count;
-  const recentOrders = db.prepare("SELECT * FROM orders ORDER BY created_at DESC LIMIT 5").all() as {
-    id: number; customer_name: string; status: string; total: number; created_at: string;
-  }[];
-  const lowStockProducts = db.prepare("SELECT * FROM products WHERE stock <= 2 ORDER BY stock ASC LIMIT 5").all() as {
-    id: number; name: string; stock: number; price: number;
-  }[];
+  const { productCount, orderCount, revenue, lowStock } = getStats();
+  const recentOrders = getAllOrders().slice(0, 5);
+  const lowStockProducts = getLowStockProducts();
 
   const stats = [
     { label: "Products", value: productCount, icon: Package, color: "text-teal" },
@@ -47,7 +39,6 @@ export default async function AdminDashboard() {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        {/* Recent Orders */}
         <div className="rounded-xl border-2 border-warm-gray bg-white p-5 shadow-sm">
           <h2 className="font-bold uppercase tracking-wider">Recent Orders</h2>
           {recentOrders.length === 0 ? (
@@ -70,7 +61,6 @@ export default async function AdminDashboard() {
           )}
         </div>
 
-        {/* Low Stock */}
         <div className="rounded-xl border-2 border-warm-gray bg-white p-5 shadow-sm">
           <h2 className="font-bold uppercase tracking-wider">Low Stock Alert</h2>
           {lowStockProducts.length === 0 ? (

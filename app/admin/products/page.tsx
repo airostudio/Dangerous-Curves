@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
-import { getDb } from "@/lib/db";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { getAllProducts } from "@/lib/db";
+import { Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
-import type { Product } from "@/lib/types";
 import DeleteProductButton from "./DeleteProductButton";
 
 export const dynamic = "force-dynamic";
@@ -15,8 +14,7 @@ export default async function AdminProductsPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const db = getDb();
-  const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all() as Product[];
+  const products = getAllProducts();
 
   return (
     <div className="p-8">
@@ -55,23 +53,17 @@ export default async function AdminProductsPage() {
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-3">
-                  <Badge variant="outline">{p.category}</Badge>
-                </td>
+                <td className="px-4 py-3"><Badge variant="outline">{p.category}</Badge></td>
                 <td className="px-4 py-3 font-bold text-cherry">{formatPrice(p.price)}</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${
                     p.stock === 0 ? "bg-cherry/10 text-cherry" : p.stock <= 2 ? "bg-gold/20 text-gold" : "bg-teal/10 text-teal"
-                  }`}>
-                    {p.stock}
-                  </span>
+                  }`}>{p.stock}</span>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex gap-1">
                     <Button variant="ghost" size="icon" asChild>
-                      <Link href={`/admin/products/${p.id}/edit`}>
-                        <Pencil className="h-4 w-4" />
-                      </Link>
+                      <Link href={`/admin/products/${p.id}/edit`}><Pencil className="h-4 w-4" /></Link>
                     </Button>
                     <DeleteProductButton productId={p.id} />
                   </div>

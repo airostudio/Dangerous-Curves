@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { updateOrderStatus } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -14,8 +14,6 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
-  const db = getDb();
-  db.prepare("UPDATE orders SET status = ? WHERE id = ?").run(status, parseInt(id));
-
+  updateOrderStatus(parseInt(id), status);
   return NextResponse.json({ success: true });
 }

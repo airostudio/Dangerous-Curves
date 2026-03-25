@@ -1,8 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { getProductById } from "@/lib/db";
 import ProductForm from "@/components/admin/ProductForm";
-import type { Product } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -11,8 +10,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   if (!session) redirect("/admin/login");
 
   const { id } = await params;
-  const db = getDb();
-  const product = db.prepare("SELECT * FROM products WHERE id = ?").get(parseInt(id)) as Product | undefined;
+  const product = getProductById(parseInt(id));
   if (!product) notFound();
 
   return (

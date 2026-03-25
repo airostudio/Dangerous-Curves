@@ -2,32 +2,12 @@ import { Suspense } from "react";
 import Header from "@/components/store/Header";
 import Footer from "@/components/store/Footer";
 import ProductCard from "@/components/store/ProductCard";
-import { getDb } from "@/lib/db";
-import type { Product } from "@/lib/types";
+import { getProductsByFilter } from "@/lib/db";
 import StoreFilters from "./StoreFilters";
 
 export const dynamic = "force-dynamic";
 
 const CATEGORIES = ["All", "Outerwear", "Dresses", "Tops", "Bottoms", "Denim", "Shoes", "Accessories"];
-
-function getProducts(category?: string, search?: string): Product[] {
-  const db = getDb();
-  let sql = "SELECT * FROM products WHERE 1=1";
-  const params: string[] = [];
-
-  if (category && category !== "All") {
-    sql += " AND category = ?";
-    params.push(category);
-  }
-  if (search) {
-    sql += " AND (name LIKE ? OR description LIKE ? OR era LIKE ? OR category LIKE ?)";
-    const term = `%${search}%`;
-    params.push(term, term, term, term);
-  }
-  sql += " ORDER BY featured DESC, created_at DESC";
-
-  return db.prepare(sql).all(...params) as Product[];
-}
 
 export default async function StorePage({
   searchParams,
@@ -37,7 +17,7 @@ export default async function StorePage({
   const params = await searchParams;
   const category = params.category || "All";
   const search = params.q || "";
-  const products = getProducts(category, search);
+  const products = getProductsByFilter(category, search);
 
   return (
     <>

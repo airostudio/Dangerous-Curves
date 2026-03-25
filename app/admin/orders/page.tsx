@@ -1,34 +1,17 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { getAllOrders } from "@/lib/db";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import OrderStatusButton from "./OrderStatusButton";
 
 export const dynamic = "force-dynamic";
 
-interface OrderRow {
-  id: number;
-  customer_name: string;
-  customer_email: string;
-  status: string;
-  total: number;
-  created_at: string;
-  item_count: number;
-}
-
 export default async function AdminOrdersPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const db = getDb();
-  const orders = db.prepare(`
-    SELECT o.*, COUNT(oi.id) as item_count
-    FROM orders o
-    LEFT JOIN order_items oi ON o.id = oi.order_id
-    GROUP BY o.id
-    ORDER BY o.created_at DESC
-  `).all() as OrderRow[];
+  const orders = getAllOrders();
 
   const statusVariant = (status: string) => {
     switch (status) {
@@ -72,17 +55,11 @@ export default async function AdminOrdersPage() {
                     <p className="font-bold">{order.customer_name}</p>
                     <p className="text-xs text-charcoal/50">{order.customer_email}</p>
                   </td>
-                  <td className="px-4 py-3">{order.item_count}</td>
+                  <td className="px-4 py-3">{order.items.length}</td>
                   <td className="px-4 py-3 font-bold text-cherry">{formatPrice(order.total)}</td>
-                  <td className="px-4 py-3">
-                    <Badge variant={statusVariant(order.status)}>{order.status}</Badge>
-                  </td>
-                  <td className="px-4 py-3 text-charcoal/50">
-                    {new Date(order.created_at).toLocaleDateString()}
-                  </td>
-                  <td className="px-4 py-3">
-                    <OrderStatusButton orderId={order.id} currentStatus={order.status} />
-                  </td>
+                  <td className="px-4 py-3"><Badge variant={statusVariant(order.status)}>{order.status}</Badge></td>
+                  <td className="px-4 py-3 text-charcoal/50">{new Date(order.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-3"><OrderStatusButton orderId={order.id} currentStatus={order.status} /></td>
                 </tr>
               ))}
             </tbody>
