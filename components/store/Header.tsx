@@ -17,9 +17,9 @@ export default function Header() {
           <Image
             src="/1774418181188.png"
             alt="Dangerous Curves"
-            width={56}
-            height={56}
-            className="h-14 w-14 object-contain"
+            width={96}
+            height={96}
+            className="h-20 w-20 object-contain sm:h-24 sm:w-24"
           />
         </Link>
 
