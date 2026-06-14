@@ -20,15 +20,15 @@ export default function Header() {
         <Link
           href="/"
           aria-label="Dangerous Curves — home"
-          className="relative flex h-full w-14 items-center lg:w-24"
+          className="relative flex h-full w-32 items-center lg:w-44"
         >
           <Image
             src="/logo.png"
             alt="Dangerous Curves"
-            width={688}
-            height={1532}
+            width={1195}
+            height={1230}
             priority
-            className="absolute left-0 top-1 h-[120px] w-auto object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] lg:h-[170px]"
+            className="absolute left-0 top-1 h-[120px] w-auto object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] lg:h-[160px]"
           />
         </Link>
 
