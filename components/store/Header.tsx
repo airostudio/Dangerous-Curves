@@ -12,14 +12,23 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-cherry bg-charcoal text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-20 lg:px-8">
+        {/* The logo sits on top of the header and hangs down past its bottom
+            edge, so it can stay full size without being squeezed. The wrapper
+            reserves horizontal space (so the nav doesn't shift) while the image
+            overflows vertically. */}
+        <Link
+          href="/"
+          aria-label="Dangerous Curves — home"
+          className="relative flex h-full w-14 items-center lg:w-24"
+        >
           <Image
             src="/logo.png"
             alt="Dangerous Curves"
-            width={150}
-            height={150}
-            className="h-[100px] w-[100px] object-contain lg:h-[150px] lg:w-[150px]"
+            width={688}
+            height={1532}
+            priority
+            className="absolute left-0 top-1 h-[120px] w-auto object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)] lg:h-[170px]"
           />
         </Link>
 
