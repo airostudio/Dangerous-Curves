@@ -17,7 +17,7 @@ export default async function StorePage({
   const params = await searchParams;
   const category = params.category || "All";
   const search = params.q || "";
-  const products = getProductsByFilter(category, search);
+  const products = await getProductsByFilter(category, search);
 
   return (
     <>

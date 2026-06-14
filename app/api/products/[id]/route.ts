@@ -10,7 +10,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   const body = await request.json();
   const { name, description, price, category, size, era, image_url, stock, featured } = body;
 
-  const ok = updateProduct(parseInt(id), {
+  const ok = await updateProduct(parseInt(id), {
     name, description: description || "", price, category,
     size: size || "", era: era || "", image_url: image_url || "",
     stock: stock || 0, featured: featured || 0,
@@ -25,6 +25,6 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  deleteProduct(parseInt(id));
+  await deleteProduct(parseInt(id));
   return NextResponse.json({ success: true });
 }

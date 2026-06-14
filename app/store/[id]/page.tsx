@@ -12,10 +12,10 @@ export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const product = getProductById(parseInt(id));
+  const product = await getProductById(parseInt(id));
   if (!product) notFound();
 
-  const related = getProductsByCategory(product.category, product.id);
+  const related = await getProductsByCategory(product.category, product.id);
 
   return (
     <>

@@ -10,7 +10,7 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
   if (!session) redirect("/admin/login");
 
   const { id } = await params;
-  const product = getProductById(parseInt(id));
+  const product = await getProductById(parseInt(id));
   if (!product) notFound();
 
   return (

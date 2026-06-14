@@ -11,7 +11,7 @@ export default async function AdminOrdersPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const orders = getAllOrders();
+  const orders = await getAllOrders();
 
   const statusVariant = (status: string) => {
     switch (status) {

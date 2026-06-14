@@ -14,6 +14,6 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Invalid status" }, { status: 400 });
   }
 
-  updateOrderStatus(parseInt(id), status);
+  await updateOrderStatus(parseInt(id), status);
   return NextResponse.json({ success: true });
 }

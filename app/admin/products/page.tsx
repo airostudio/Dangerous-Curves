@@ -14,7 +14,7 @@ export default async function AdminProductsPage() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const products = getAllProducts();
+  const products = await getAllProducts();
 
   return (
     <div className="p-8">

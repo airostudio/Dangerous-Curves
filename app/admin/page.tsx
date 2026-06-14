@@ -10,9 +10,9 @@ export default async function AdminDashboard() {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const { productCount, orderCount, revenue, lowStock } = getStats();
-  const recentOrders = getAllOrders().slice(0, 5);
-  const lowStockProducts = getLowStockProducts();
+  const { productCount, orderCount, revenue, lowStock } = await getStats();
+  const recentOrders = (await getAllOrders()).slice(0, 5);
+  const lowStockProducts = await getLowStockProducts();
 
   const stats = [
     { label: "Products", value: productCount, icon: Package, color: "text-teal" },
