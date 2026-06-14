@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { useState } from "react";
+import { Trash2, Minus, Plus, ShoppingBag, Loader2, CreditCard } from "lucide-react";
 import Header from "@/components/store/Header";
 import Footer from "@/components/store/Footer";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,32 @@ import { formatPrice } from "@/lib/utils";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, clearCart } = useCart();
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  async function handleCheckout() {
+    setCheckingOut(true); setCheckoutError("");
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: items.map(({ product, quantity }) => ({
+          product_id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity,
+          image_url: product.image_url,
+        })),
+      }),
+    });
+    const data = await res.json();
+    if (res.ok && data.url) {
+      window.location.href = data.url;
+    } else {
+      setCheckoutError(data.error ?? "Checkout failed");
+      setCheckingOut(false);
+    }
+  }
 
   return (
     <>
@@ -91,8 +118,18 @@ export default function CartPage() {
                   <p className="font-brand text-3xl text-cherry">{formatPrice(totalPrice)}</p>
                 </div>
                 <p className="mt-1 text-xs text-charcoal/50">Shipping calculated at checkout</p>
-                <Button size="lg" className="mt-4 w-full">
-                  Proceed to Checkout
+                {checkoutError && (
+                  <p className="mt-2 text-xs text-cherry">{checkoutError}</p>
+                )}
+                <Button
+                  size="lg"
+                  className="mt-4 w-full"
+                  onClick={handleCheckout}
+                  disabled={checkingOut}
+                >
+                  {checkingOut
+                    ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Redirecting…</>
+                    : <><CreditCard className="mr-2 h-4 w-4" />Checkout with Stripe</>}
                 </Button>
                 <div className="mt-3 flex gap-3">
                   <Button variant="outline" size="sm" className="flex-1" asChild>

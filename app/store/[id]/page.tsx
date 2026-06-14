@@ -4,9 +4,10 @@ import { ArrowLeft, Shield, Truck, RotateCcw } from "lucide-react";
 import Header from "@/components/store/Header";
 import Footer from "@/components/store/Footer";
 import { Badge } from "@/components/ui/badge";
-import { getProductById, getProductsByCategory } from "@/lib/db";
+import { getProductById, getProductsByCategory, getProductImages } from "@/lib/db";
 import { formatPrice } from "@/lib/utils";
 import AddToCartButton from "./AddToCartButton";
+import ProductGallery from "@/components/store/ProductGallery";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const product = await getProductById(parseInt(id));
   if (!product) notFound();
 
-  const related = await getProductsByCategory(product.category, product.id);
+  const [related, images] = await Promise.all([
+    getProductsByCategory(product.category, product.id),
+    getProductImages(product.id),
+  ]);
 
   return (
     <>
@@ -30,9 +34,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           </Link>
 
           <div className="mt-6 grid gap-10 lg:grid-cols-2">
-            <div className="overflow-hidden rounded-2xl border-2 border-warm-gray bg-cream shadow-lg">
-              <img src={product.image_url} alt={product.name} className="aspect-[4/5] w-full object-cover" />
-            </div>
+            <ProductGallery
+              images={images}
+              fallbackUrl={product.image_url}
+              productName={product.name}
+            />
 
             <div className="flex flex-col justify-center space-y-6">
               <div className="flex flex-wrap gap-2">
@@ -47,10 +53,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="rounded-lg border border-warm-gray bg-cream px-4 py-2">
-                  <span className="text-charcoal/50">Size:</span> <span className="font-bold">{product.size}</span>
+                  <span className="text-charcoal/50">Size:</span>{" "}
+                  <span className="font-bold">{product.size}</span>
                 </div>
                 <div className="rounded-lg border border-warm-gray bg-cream px-4 py-2">
-                  <span className="text-charcoal/50">Era:</span> <span className="font-bold">{product.era}</span>
+                  <span className="text-charcoal/50">Era:</span>{" "}
+                  <span className="font-bold">{product.era}</span>
                 </div>
                 <div className="rounded-lg border border-warm-gray bg-cream px-4 py-2">
                   <span className="text-charcoal/50">Stock:</span>{" "}
@@ -82,7 +90,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 {related.map((p) => (
                   <Link key={p.id} href={`/store/${p.id}`} className="group">
                     <div className="overflow-hidden rounded-xl border-2 border-warm-gray transition hover:border-cherry">
-                      <img src={p.image_url} alt={p.name} className="aspect-[3/4] w-full object-cover transition group-hover:scale-105" />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.image_url}
+                        alt={p.name}
+                        className="aspect-[3/4] w-full object-cover transition group-hover:scale-105"
+                      />
                     </div>
                     <p className="mt-2 font-bold transition group-hover:text-cherry">{p.name}</p>
                     <p className="text-sm text-cherry">{formatPrice(p.price)}</p>
