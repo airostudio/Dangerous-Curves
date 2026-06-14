@@ -11,17 +11,22 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b-2 border-cherry bg-charcoal text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center">
+    <header className="sticky top-0 z-50 overflow-visible border-b-2 border-cherry bg-charcoal text-white">
+      <div className="relative mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+        {/* Logo is absolutely positioned so it hangs below the header's natural height */}
+        <Link href="/" className="absolute left-4 top-0 z-10 sm:left-6 lg:left-8">
           <Image
             src="/logo.png"
             alt="Dangerous Curves"
-            width={150}
-            height={150}
-            className="h-[100px] w-[100px] object-contain lg:h-[150px] lg:w-[150px]"
+            width={130}
+            height={218}
+            priority
+            className="h-[120px] w-auto object-contain drop-shadow-[0_3px_10px_rgba(0,0,0,0.95)] lg:h-[170px]"
           />
         </Link>
+
+        {/* Spacer reserves horizontal space for the logo */}
+        <div className="w-[72px] shrink-0 lg:w-[102px]" />
 
         <nav className="hidden items-center gap-8 text-sm font-bold uppercase tracking-wider lg:flex">
           <Link href="/" className="transition hover:text-cherry">Home</Link>
