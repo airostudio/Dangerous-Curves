@@ -8,12 +8,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
   const { id } = await params;
   const body = await request.json();
-  const { name, description, price, category, size, era, image_url, stock, featured } = body;
+  const { name, description, price, category, size, era, image_url, stock, featured, status } = body;
 
   const ok = await updateProduct(parseInt(id), {
     name, description: description || "", price, category,
     size: size || "", era: era || "", image_url: image_url || "",
     stock: stock || 0, featured: featured || 0,
+    status: status === "draft" ? "draft" : "published",
   });
 
   if (!ok) return NextResponse.json({ error: "Product not found" }, { status: 404 });
