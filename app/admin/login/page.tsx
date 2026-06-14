@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Flame className="mx-auto h-10 w-10 text-cherry" />
-          <h1 className="font-rockabilly mt-3 text-3xl text-white">Admin Login</h1>
+          <h1 className="font-brand mt-3 text-3xl text-white">Admin Login</h1>
           <p className="mt-1 text-sm text-warm-gray">Dangerous Curves Backstage</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4 rounded-xl border-2 border-cherry/30 bg-charcoal-light p-6">

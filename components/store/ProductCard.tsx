@@ -31,7 +31,7 @@ export default function ProductCard({ product }: { product: Product }) {
           )}
           {product.stock === 0 && (
             <div className="absolute inset-0 flex items-center justify-center bg-charcoal/60">
-              <span className="font-rockabilly text-2xl text-white">Sold Out</span>
+              <span className="font-brand text-2xl text-white">Sold Out</span>
             </div>
           )}
         </div>
@@ -48,7 +48,7 @@ export default function ProductCard({ product }: { product: Product }) {
               {product.category} &middot; Size {product.size}
             </p>
           </div>
-          <p className="font-rockabilly text-lg text-cherry">{formatPrice(product.price)}</p>
+          <p className="font-brand text-lg text-cherry">{formatPrice(product.price)}</p>
         </div>
         <Button
           onClick={() => addItem(product)}

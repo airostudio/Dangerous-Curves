@@ -18,7 +18,7 @@ export default function CartPage() {
         <section className="border-b border-warm-gray bg-charcoal py-10 text-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="text-xs uppercase tracking-[0.3em] text-cherry">Your selections</p>
-            <h1 className="font-rockabilly mt-1 text-4xl sm:text-5xl">Shopping Bag</h1>
+            <h1 className="font-brand mt-1 text-4xl sm:text-5xl">Shopping Bag</h1>
           </div>
         </section>
 
@@ -26,7 +26,7 @@ export default function CartPage() {
           {items.length === 0 ? (
             <div className="py-20 text-center">
               <ShoppingBag className="mx-auto h-12 w-12 text-warm-gray" />
-              <p className="font-rockabilly mt-4 text-2xl">Your bag is empty</p>
+              <p className="font-brand mt-4 text-2xl">Your bag is empty</p>
               <p className="mt-2 text-sm text-charcoal/60">Time to fill it with something dangerous.</p>
               <Button className="mt-6" asChild>
                 <Link href="/store">Shop Now</Link>
@@ -70,7 +70,7 @@ export default function CartPage() {
                             <Plus className="h-3 w-3" />
                           </button>
                         </div>
-                        <p className="font-rockabilly text-lg text-cherry">
+                        <p className="font-brand text-lg text-cherry">
                           {formatPrice(product.price * quantity)}
                         </p>
                         <button
@@ -88,7 +88,7 @@ export default function CartPage() {
               <div className="mt-8 rounded-xl border-2 border-charcoal bg-white p-6 shadow-lg">
                 <div className="flex items-center justify-between">
                   <p className="font-bold uppercase tracking-wider">Total</p>
-                  <p className="font-rockabilly text-3xl text-cherry">{formatPrice(totalPrice)}</p>
+                  <p className="font-brand text-3xl text-cherry">{formatPrice(totalPrice)}</p>
                 </div>
                 <p className="mt-1 text-xs text-charcoal/50">Shipping calculated at checkout</p>
                 <Button size="lg" className="mt-4 w-full">

@@ -20,7 +20,7 @@ export default async function AdminProductsPage() {
     <div className="p-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-rockabilly text-3xl">Products</h1>
+          <h1 className="font-brand text-3xl">Products</h1>
           <p className="mt-1 text-sm text-charcoal/60">{products.length} items in catalog</p>
         </div>
         <Button asChild>

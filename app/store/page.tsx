@@ -26,7 +26,7 @@ export default async function StorePage({
         <section className="border-b border-warm-gray bg-charcoal py-10 text-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="text-xs uppercase tracking-[0.3em] text-cherry">Browse the rack</p>
-            <h1 className="font-rockabilly mt-1 text-4xl sm:text-5xl">
+            <h1 className="font-brand mt-1 text-4xl sm:text-5xl">
               {category !== "All" ? category : "Shop All"}
             </h1>
             {search && (
@@ -44,7 +44,7 @@ export default async function StorePage({
 
           {products.length === 0 ? (
             <div className="py-20 text-center">
-              <p className="font-rockabilly text-2xl text-charcoal">No pieces found</p>
+              <p className="font-brand text-2xl text-charcoal">No pieces found</p>
               <p className="mt-2 text-sm text-warm-gray">Try adjusting your filters or search terms.</p>
             </div>
           ) : (

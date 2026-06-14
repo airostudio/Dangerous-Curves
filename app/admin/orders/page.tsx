@@ -25,12 +25,12 @@ export default async function AdminOrdersPage() {
 
   return (
     <div className="p-8">
-      <h1 className="font-rockabilly text-3xl">Orders</h1>
+      <h1 className="font-brand text-3xl">Orders</h1>
       <p className="mt-1 text-sm text-charcoal/60">{orders.length} total orders</p>
 
       {orders.length === 0 ? (
         <div className="mt-10 rounded-xl border-2 border-warm-gray bg-white p-12 text-center shadow-sm">
-          <p className="font-rockabilly text-2xl text-charcoal/40">No orders yet</p>
+          <p className="font-brand text-2xl text-charcoal/40">No orders yet</p>
           <p className="mt-2 text-sm text-charcoal/40">Orders will appear here when customers check out.</p>
         </div>
       ) : (

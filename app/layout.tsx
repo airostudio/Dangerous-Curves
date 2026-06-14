@@ -3,8 +3,8 @@ import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 
 export const metadata: Metadata = {
-  title: "Dangerous Curves — Vintage & Rockabilly Fashion",
-  description: "Curated vintage and rockabilly fashion. One-of-a-kind pieces with bold silhouettes, pin-up glamour, and rebel attitude.",
+  title: "Dangerous Curves — Vintage Fashion",
+  description: "Curated vintage fashion. One-of-a-kind pieces with bold silhouettes, pin-up glamour, and rebel attitude.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

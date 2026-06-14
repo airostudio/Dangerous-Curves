@@ -19,7 +19,7 @@ export default function AdminSidebar({ username }: { username: string }) {
       <div className="border-b border-white/10 px-5 py-5">
         <div className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-cherry" />
-          <span className="font-rockabilly text-sm">Dangerous Curves</span>
+          <span className="font-brand text-sm">Dangerous Curves</span>
         </div>
         <p className="mt-1 text-xs text-warm-gray">Admin Panel</p>
       </div>

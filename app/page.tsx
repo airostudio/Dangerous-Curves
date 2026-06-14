@@ -26,14 +26,14 @@ export default async function HomePage() {
                 <Badge variant="default" className="text-sm">
                   <Flame className="mr-1 h-3 w-3" /> New Arrivals Every Friday
                 </Badge>
-                <h1 className="font-rockabilly text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
+                <h1 className="font-brand text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
                   Dress like the
                   <span className="text-cherry"> devil</span> on your
                   <span className="text-gold"> shoulder.</span>
                 </h1>
                 <p className="max-w-lg text-lg leading-relaxed text-warm-gray">
                   Dangerous Curves is a hand-picked vintage boutique stocked with
-                  rockabilly fire, pin-up glamour, and one-of-a-kind pieces that
+                  bold silhouettes, pin-up glamour, and one-of-a-kind pieces that
                   refuse to blend in.
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -51,16 +51,16 @@ export default async function HomePage() {
                 <div className="overflow-hidden rounded-2xl border-2 border-cherry shadow-2xl shadow-cherry/20">
                   <img
                     src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80"
-                    alt="Vintage rockabilly fashion"
+                    alt="Vintage fashion"
                     className="aspect-[4/5] w-full object-cover"
                   />
                 </div>
                 <div className="absolute -bottom-4 -left-4 rounded-xl border-2 border-cherry bg-charcoal px-4 py-3 shadow-lg">
-                  <p className="font-rockabilly text-2xl text-cherry">500+</p>
+                  <p className="font-brand text-2xl text-cherry">500+</p>
                   <p className="text-xs uppercase tracking-widest text-warm-gray">Unique pieces</p>
                 </div>
                 <div className="absolute -right-4 top-8 rounded-xl border-2 border-gold bg-charcoal px-4 py-3 shadow-lg">
-                  <p className="font-rockabilly text-2xl text-gold">4.9</p>
+                  <p className="font-brand text-2xl text-gold">4.9</p>
                   <p className="text-xs uppercase tracking-widest text-warm-gray">Star rating</p>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default async function HomePage() {
           <div className="mb-8 flex items-end justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-cherry">Hot off the rack</p>
-              <h2 className="font-rockabilly mt-1 text-3xl sm:text-4xl">Featured Picks</h2>
+              <h2 className="font-brand mt-1 text-3xl sm:text-4xl">Featured Picks</h2>
             </div>
             <Button variant="ghost" asChild>
               <Link href="/store">View All <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -110,7 +110,7 @@ export default async function HomePage() {
           <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-2xl text-center">
               <p className="font-script text-lg text-cherry">Not your average thrift store</p>
-              <h2 className="font-rockabilly mt-2 text-3xl sm:text-4xl">
+              <h2 className="font-brand mt-2 text-3xl sm:text-4xl">
                 Vintage with grit, glamour, and a little danger.
               </h2>
               <p className="mx-auto mt-4 max-w-lg text-warm-gray">
@@ -119,7 +119,7 @@ export default async function HomePage() {
                 unforgettable clothes with history and attitude.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
-                {["Rockabilly", "Pin-Up", "50s Greaser", "80s Glam", "Vintage Denim"].map((tag) => (
+                {["Pin-Up", "50s Greaser", "80s Glam", "Vintage Denim", "Retro"].map((tag) => (
                   <Badge key={tag} variant="outline" className="border-warm-gray/30 text-warm-gray">{tag}</Badge>
                 ))}
               </div>

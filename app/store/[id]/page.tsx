@@ -41,8 +41,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
                 {product.featured === 1 && <Badge variant="default">Featured</Badge>}
               </div>
 
-              <h1 className="font-rockabilly text-4xl sm:text-5xl">{product.name}</h1>
-              <p className="font-rockabilly text-4xl text-cherry">{formatPrice(product.price)}</p>
+              <h1 className="font-brand text-4xl sm:text-5xl">{product.name}</h1>
+              <p className="font-brand text-4xl text-cherry">{formatPrice(product.price)}</p>
               <p className="text-base leading-relaxed text-charcoal-light/80">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 text-sm">
@@ -77,7 +77,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
           {related.length > 0 && (
             <div className="mt-16">
-              <h2 className="font-rockabilly text-2xl">You might also dig</h2>
+              <h2 className="font-brand text-2xl">You might also dig</h2>
               <div className="mt-4 grid gap-6 sm:grid-cols-3">
                 {related.map((p) => (
                   <Link key={p.id} href={`/store/${p.id}`} className="group">

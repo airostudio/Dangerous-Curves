@@ -9,10 +9,10 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2">
               <Flame className="h-6 w-6 text-cherry" />
-              <p className="font-rockabilly text-xl">Dangerous Curves</p>
+              <p className="font-brand text-xl">Dangerous Curves</p>
             </div>
             <p className="mt-3 text-sm leading-6 text-warm-gray">
-              Curated vintage and rockabilly fashion for rebels, pin-ups, and
+              Curated vintage fashion for rebels, pin-ups, and
               anyone who believes clothes should make an entrance.
             </p>
           </div>

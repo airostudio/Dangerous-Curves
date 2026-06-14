@@ -10,7 +10,7 @@ export default async function NewProductPage() {
 
   return (
     <div className="p-8">
-      <h1 className="font-rockabilly text-3xl">Add Product</h1>
+      <h1 className="font-brand text-3xl">Add Product</h1>
       <p className="mt-1 text-sm text-charcoal/60">Add a new piece to the collection</p>
       <div className="mt-6">
         <ProductForm />

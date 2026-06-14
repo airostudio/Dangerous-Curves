@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="p-8">
-      <h1 className="font-rockabilly text-3xl">Dashboard</h1>
+      <h1 className="font-brand text-3xl">Dashboard</h1>
       <p className="mt-1 text-sm text-charcoal/60">Welcome back, {session.username}</p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
               <p className="text-xs font-bold uppercase tracking-wider text-charcoal/50">{label}</p>
               <Icon className={`h-5 w-5 ${color}`} />
             </div>
-            <p className="mt-2 font-rockabilly text-3xl">{value}</p>
+            <p className="mt-2 font-brand text-3xl">{value}</p>
           </div>
         ))}
       </div>
