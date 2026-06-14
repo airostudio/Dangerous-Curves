@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
+    "@imgly/background-removal": "^1.4.5",
+    "react-easy-crop": "^5.4.0",
+    "sonner": "^2.0.3",
+    "stripe": "^17.0.0",
     "@radix-ui/react-slot": "^1.2.4",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",

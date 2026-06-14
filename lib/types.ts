@@ -9,6 +9,19 @@ export interface Product {
   image_url: string;
   stock: number;
   featured: number;
+  status: string;
+  created_at: string;
+}
+
+export interface ProductImage {
+  id: number;
+  product_id: number;
+  path: string;
+  url: string;
+  position: number;
+  is_primary: boolean;
+  width: number | null;
+  height: number | null;
   created_at: string;
 }
 
@@ -19,6 +32,7 @@ export interface Order {
   customer_address: string;
   status: string;
   total: number;
+  stripe_session_id: string | null;
   created_at: string;
 }
 
