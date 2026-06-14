@@ -74,23 +74,23 @@ export async function createProduct(data: Omit<Product, "id" | "created_at">): P
 }
 
 export async function updateProduct(id: number, data: Omit<Product, "id" | "created_at">): Promise<boolean> {
-  const { error, count } = await supabase
+  const { data: rows, error } = await supabase
     .from("products")
     .update(data)
     .eq("id", id)
-    .select("id", { count: "exact", head: true });
+    .select("id");
   if (error) throw error;
-  return (count ?? 0) > 0;
+  return (rows?.length ?? 0) > 0;
 }
 
 export async function deleteProduct(id: number): Promise<boolean> {
-  const { error, count } = await supabase
+  const { data: rows, error } = await supabase
     .from("products")
     .delete()
     .eq("id", id)
-    .select("id", { count: "exact", head: true });
+    .select("id");
   if (error) throw error;
-  return (count ?? 0) > 0;
+  return (rows?.length ?? 0) > 0;
 }
 
 // --- Orders ---
@@ -151,13 +151,13 @@ export async function createOrder(data: {
 }
 
 export async function updateOrderStatus(id: number, status: string): Promise<boolean> {
-  const { error, count } = await supabase
+  const { data: rows, error } = await supabase
     .from("orders")
     .update({ status })
     .eq("id", id)
-    .select("id", { count: "exact", head: true });
+    .select("id");
   if (error) throw error;
-  return (count ?? 0) > 0;
+  return (rows?.length ?? 0) > 0;
 }
 
 // --- Stats ---
