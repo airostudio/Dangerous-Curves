@@ -233,7 +233,8 @@ export async function getSessionById(
     .gt("expires_at", new Date().toISOString())
     .single();
   if (error || !data) return null;
-  const username = (data.admin_users as { username: string } | null)?.username;
+  const related = data.admin_users as { username: string }[] | null;
+  const username = related?.[0]?.username;
   if (!username) return null;
   return { user_id: data.user_id, username };
 }
