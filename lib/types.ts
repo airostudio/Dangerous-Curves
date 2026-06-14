@@ -10,6 +10,20 @@ export interface Product {
   stock: number;
   featured: number;
   status: string;
+  weight_grams: number;
+  created_at: string;
+}
+
+export interface DiscountCode {
+  id: number;
+  code: string;
+  type: "percentage" | "fixed";
+  value: number;
+  min_order: number;
+  max_uses: number | null;
+  used_count: number;
+  active: boolean;
+  expires_at: string | null;
   created_at: string;
 }
 

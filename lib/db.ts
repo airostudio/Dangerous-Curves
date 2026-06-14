@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Product, ProductImage, Order, OrderItem } from "./types";
+import type { Product, ProductImage, Order, OrderItem, DiscountCode } from "./types";
 
 // --- Products ---
 
@@ -287,4 +287,117 @@ export async function recordLoginAttempt(ip: string): Promise<void> {
 
 export async function clearLoginAttempts(ip: string): Promise<void> {
   await supabase.from("login_attempts").delete().eq("ip", ip);
+}
+
+// --- Site settings ---
+
+export async function getSetting(key: string): Promise<string | null> {
+  const { data } = await supabase
+    .from("site_settings").select("value").eq("key", key).single();
+  return data?.value ?? null;
+}
+
+export async function getAllSettings(): Promise<Record<string, string>> {
+  const { data } = await supabase.from("site_settings").select("key, value");
+  return Object.fromEntries((data ?? []).map((r) => [r.key, r.value]));
+}
+
+export async function setSetting(key: string, value: string): Promise<void> {
+  await supabase.from("site_settings").upsert({ key, value }, { onConflict: "key" });
+}
+
+export async function setSettings(pairs: Record<string, string>): Promise<void> {
+  const rows = Object.entries(pairs).map(([key, value]) => ({ key, value }));
+  await supabase.from("site_settings").upsert(rows, { onConflict: "key" });
+}
+
+// --- Discount codes ---
+
+export async function getAllDiscountCodes(): Promise<DiscountCode[]> {
+  const { data, error } = await supabase
+    .from("discount_codes").select("*").order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createDiscountCode(
+  data: Omit<DiscountCode, "id" | "used_count" | "created_at">
+): Promise<number> {
+  const { data: row, error } = await supabase
+    .from("discount_codes").insert({ ...data, code: data.code.toUpperCase() }).select("id").single();
+  if (error) throw error;
+  return row.id;
+}
+
+export async function updateDiscountCode(
+  id: number,
+  data: Partial<Omit<DiscountCode, "id" | "created_at">>
+): Promise<boolean> {
+  const update = data.code ? { ...data, code: data.code.toUpperCase() } : data;
+  const { data: rows, error } = await supabase
+    .from("discount_codes").update(update).eq("id", id).select("id");
+  if (error) throw error;
+  return (rows?.length ?? 0) > 0;
+}
+
+export async function deleteDiscountCode(id: number): Promise<boolean> {
+  const { data: rows, error } = await supabase
+    .from("discount_codes").delete().eq("id", id).select("id");
+  if (error) throw error;
+  return (rows?.length ?? 0) > 0;
+}
+
+export async function validateDiscountCode(
+  code: string,
+  orderTotal: number
+): Promise<{ discount: DiscountCode; discount_amount: number } | null> {
+  const { data, error } = await supabase
+    .from("discount_codes")
+    .select("*")
+    .eq("code", code.toUpperCase())
+    .eq("active", true)
+    .single();
+  if (error || !data) return null;
+  if (data.expires_at && new Date(data.expires_at) < new Date()) return null;
+  if (data.max_uses !== null && data.used_count >= data.max_uses) return null;
+  if (orderTotal < data.min_order) return null;
+
+  const discount_amount =
+    data.type === "percentage"
+      ? Math.floor((orderTotal * data.value) / 100)
+      : Math.min(data.value, orderTotal);
+
+  return { discount: data, discount_amount };
+}
+
+export async function incrementDiscountCodeUsage(id: number): Promise<void> {
+  const { data } = await supabase
+    .from("discount_codes").select("used_count").eq("id", id).single();
+  if (data) {
+    await supabase
+      .from("discount_codes").update({ used_count: data.used_count + 1 }).eq("id", id);
+  }
+}
+
+// --- Admin users ---
+
+export async function getAllAdminUsers(): Promise<{ id: number; username: string }[]> {
+  const { data, error } = await supabase
+    .from("admin_users").select("id, username").order("id");
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createAdminUser(username: string, passwordHash: string): Promise<number> {
+  const { data, error } = await supabase
+    .from("admin_users").insert({ username, password_hash: passwordHash }).select("id").single();
+  if (error) throw error;
+  return data.id;
+}
+
+export async function deleteAdminUser(id: number): Promise<boolean> {
+  const { data: rows, error } = await supabase
+    .from("admin_users").delete().eq("id", id).select("id");
+  if (error) throw error;
+  return (rows?.length ?? 0) > 0;
 }

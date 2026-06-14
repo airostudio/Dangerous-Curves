@@ -3,18 +3,19 @@
 
 -- Products
 create table if not exists products (
-  id          bigint generated always as identity primary key,
-  name        text     not null,
-  description text     not null default '',
-  price       integer  not null,
-  category    text     not null,
-  size        text     not null default '',
-  era         text     not null default '',
-  image_url   text     not null default '',
-  stock       integer  not null default 0,
-  featured    smallint not null default 0,
-  status      text     not null default 'published',  -- 'draft' | 'published'
-  created_at  timestamptz not null default now()
+  id           bigint generated always as identity primary key,
+  name         text     not null,
+  description  text     not null default '',
+  price        integer  not null,
+  category     text     not null,
+  size         text     not null default '',
+  era          text     not null default '',
+  image_url    text     not null default '',
+  stock        integer  not null default 0,
+  featured     smallint not null default 0,
+  status       text     not null default 'published',  -- 'draft' | 'published'
+  weight_grams integer  not null default 500,
+  created_at   timestamptz not null default now()
 );
 
 -- Product images (multiple per product)
@@ -74,6 +75,31 @@ create table if not exists login_attempts (
   attempted_at timestamptz not null default now()
 );
 create index if not exists login_attempts_ip_time on login_attempts (ip, attempted_at);
+
+-- Site settings (key/value store)
+create table if not exists site_settings (
+  key   text primary key,
+  value text not null default ''
+);
+insert into site_settings (key, value) values
+  ('auspost_api_key', ''),
+  ('sender_postcode', ''),
+  ('handling_fee_cents', '0')
+on conflict (key) do nothing;
+
+-- Discount codes
+create table if not exists discount_codes (
+  id          bigint generated always as identity primary key,
+  code        text    not null unique,
+  type        text    not null default 'percentage',  -- 'percentage' | 'fixed'
+  value       integer not null,   -- percentage (1-100) or cents
+  min_order   integer not null default 0,
+  max_uses    integer,            -- null = unlimited
+  used_count  integer not null default 0,
+  active      boolean not null default true,
+  expires_at  timestamptz,
+  created_at  timestamptz not null default now()
+);
 
 -- Seed admin user (username: admin / password: admin123)
 -- CHANGE THIS PASSWORD immediately after first login via /admin/settings

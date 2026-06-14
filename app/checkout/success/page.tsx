@@ -23,7 +23,7 @@ export default async function CheckoutSuccessPage({
       });
 
       if (session.payment_status === "paid") {
-        const { createOrder, getOrderByStripeSession } = await import("@/lib/db");
+        const { createOrder, getOrderByStripeSession, incrementDiscountCodeUsage } = await import("@/lib/db");
         const existing = await getOrderByStripeSession(session_id);
         if (!existing) {
           const items = JSON.parse(session.metadata?.items ?? "[]");
@@ -38,6 +38,10 @@ export default async function CheckoutSuccessPage({
             stripe_session_id: session_id,
             items,
           });
+          const discountCodeId = session.metadata?.discount_code_id;
+          if (discountCodeId) {
+            await incrementDiscountCodeUsage(parseInt(discountCodeId)).catch(() => {});
+          }
         }
       }
     } catch (err) {

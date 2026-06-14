@@ -56,6 +56,7 @@ export default function ProductForm({ product }: Props) {
   const [description, setDescription] = useState(product?.description ?? "");
   const [price, setPrice] = useState(product ? (product.price / 100).toFixed(2) : "");
   const [stock, setStock] = useState(String(product?.stock ?? 1));
+  const [weightGrams, setWeightGrams] = useState(String(product?.weight_grams ?? 500));
   const [category, setCategory] = useState(product?.category ?? "");
   const [size, setSize] = useState(product?.size ?? "");
   const [era, setEra] = useState(product?.era ?? "");
@@ -94,6 +95,7 @@ export default function ProductForm({ product }: Props) {
       price: Math.round(parseFloat(price) * 100),
       category, size, era,
       stock: parseInt(stock),
+      weight_grams: parseInt(weightGrams) || 500,
       featured: featured ? 1 : 0,
       status,
       image_url: images.find(i => i.is_primary)?.url ?? product?.image_url ?? "",
@@ -217,6 +219,15 @@ export default function ProductForm({ product }: Props) {
                   value={stock} onChange={e => setStock(e.target.value)}
                   required
                 />
+              </div>
+              <div>
+                <Label>Weight (grams)</Label>
+                <Input
+                  type="number" min="50" step="50"
+                  value={weightGrams} onChange={e => setWeightGrams(e.target.value)}
+                  placeholder="500"
+                />
+                <p className="mt-1 text-xs text-charcoal/40">For AusPost shipping rates</p>
               </div>
             </div>
           </SectionCard>

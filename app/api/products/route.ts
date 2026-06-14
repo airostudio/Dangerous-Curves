@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json();
-  const { name, description, price, category, size, era, image_url, stock, featured, status } = body;
+  const { name, description, price, category, size, era, image_url, stock, featured, status, weight_grams } = body;
 
   if (!name || !price || !category) {
     return NextResponse.json({ error: "Name, price, and category are required" }, { status: 400 });
@@ -18,6 +18,7 @@ export async function POST(request: Request) {
     size: size || "", era: era || "", image_url: image_url || "",
     stock: stock || 0, featured: featured || 0,
     status: status === "draft" ? "draft" : "published",
+    weight_grams: weight_grams || 500,
   });
 
   return NextResponse.json({ id }, { status: 201 });
