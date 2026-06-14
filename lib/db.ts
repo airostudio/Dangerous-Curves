@@ -226,17 +226,22 @@ export async function createSession(sessionId: string, userId: number, expiresAt
 export async function getSessionById(
   sessionId: string
 ): Promise<{ user_id: number; username: string } | null> {
-  const { data, error } = await supabase
+  const { data: session, error } = await supabase
     .from("sessions")
-    .select("user_id, expires_at, admin_users(username)")
+    .select("user_id, expires_at")
     .eq("id", sessionId)
     .gt("expires_at", new Date().toISOString())
     .single();
-  if (error || !data) return null;
-  const related = data.admin_users as { username: string }[] | null;
-  const username = related?.[0]?.username;
-  if (!username) return null;
-  return { user_id: data.user_id, username };
+  if (error || !session) return null;
+
+  const { data: user, error: uErr } = await supabase
+    .from("admin_users")
+    .select("username")
+    .eq("id", session.user_id)
+    .single();
+  if (uErr || !user) return null;
+
+  return { user_id: session.user_id, username: user.username };
 }
 
 export async function deleteSession(sessionId: string): Promise<void> {
