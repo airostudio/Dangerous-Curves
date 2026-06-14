@@ -82,7 +82,9 @@ create table if not exists site_settings (
   value text not null default ''
 );
 insert into site_settings (key, value) values
-  ('auspost_api_key', ''),
+  ('auspost_username', ''),
+  ('auspost_password', ''),
+  ('auspost_account_number', ''),
   ('sender_postcode', ''),
   ('handling_fee_cents', '0')
 on conflict (key) do nothing;

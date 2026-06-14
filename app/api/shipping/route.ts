@@ -17,12 +17,17 @@ export async function POST(request: Request) {
   }
 
   const settings = await getAllSettings();
-  const api_key = settings.auspost_api_key ?? "";
+  const username = settings.auspost_username ?? "";
+  const password = settings.auspost_password ?? "";
+  const account_number = settings.auspost_account_number ?? "";
   const from_postcode = settings.sender_postcode ?? "";
   const handling_fee = parseInt(settings.handling_fee_cents ?? "0", 10) || 0;
 
-  if (!api_key || !from_postcode) {
-    return NextResponse.json({ error: "Shipping not configured. Add AusPost credentials in Settings." }, { status: 503 });
+  if (!username || !password || !account_number || !from_postcode) {
+    return NextResponse.json(
+      { error: "Shipping not configured. Add your AusPost eParcel credentials in Settings." },
+      { status: 503 }
+    );
   }
 
   const total_weight = items.reduce(
@@ -30,20 +35,25 @@ export async function POST(request: Request) {
     0
   );
 
-  const { standard, express } = await getDomesticRates({
-    api_key,
+  const { rates, error } = await getDomesticRates({
+    credentials: { username, password, account_number },
     from_postcode,
     to_postcode,
     weight_grams: total_weight,
   });
 
-  const rates: ShippingRate[] = [];
-  if (standard) rates.push({ ...standard, price: standard.price + handling_fee });
-  if (express) rates.push({ ...express, price: express.price + handling_fee });
-
-  if (rates.length === 0) {
-    return NextResponse.json({ error: "Could not retrieve shipping rates. Check your postcode and try again." }, { status: 502 });
+  if (error || rates.length === 0) {
+    return NextResponse.json(
+      { error: error ?? "Could not retrieve shipping rates. Check your postcode and try again." },
+      { status: 502 }
+    );
   }
 
-  return NextResponse.json({ rates, handling_fee });
+  // Apply the per-order handling fee on top of the carrier rate
+  const withHandling: ShippingRate[] = rates.map((r) => ({
+    ...r,
+    price: r.price + handling_fee,
+  }));
+
+  return NextResponse.json({ rates: withHandling, handling_fee });
 }

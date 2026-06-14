@@ -33,7 +33,9 @@ export default function AdminSettingsPage() {
   const [pwSuccess, setPwSuccess] = useState(false);
 
   // Shipping settings
-  const [auspostKey, setAuspostKey] = useState("");
+  const [auspostUsername, setAuspostUsername] = useState("");
+  const [auspostPassword, setAuspostPassword] = useState("");
+  const [auspostAccount, setAuspostAccount] = useState("");
   const [senderPostcode, setSenderPostcode] = useState("");
   const [handlingFee, setHandlingFee] = useState("0.00");
   const [shippingLoading, setShippingLoading] = useState(false);
@@ -45,7 +47,9 @@ export default function AdminSettingsPage() {
     fetch("/api/admin/settings")
       .then((r) => r.json())
       .then(({ settings }) => {
-        setAuspostKey(settings.auspost_api_key ?? "");
+        setAuspostUsername(settings.auspost_username ?? "");
+        setAuspostPassword(settings.auspost_password ?? "");
+        setAuspostAccount(settings.auspost_account_number ?? "");
         setSenderPostcode(settings.sender_postcode ?? "");
         const feeCents = parseInt(settings.handling_fee_cents ?? "0", 10) || 0;
         setHandlingFee((feeCents / 100).toFixed(2));
@@ -79,7 +83,9 @@ export default function AdminSettingsPage() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        auspost_api_key: auspostKey.trim(),
+        auspost_username: auspostUsername.trim(),
+        auspost_password: auspostPassword.trim(),
+        auspost_account_number: auspostAccount.trim(),
         sender_postcode: senderPostcode.trim(),
         handling_fee_cents: String(handlingCents),
       }),
@@ -103,18 +109,45 @@ export default function AdminSettingsPage() {
             </div>
           ) : (
             <form onSubmit={handleShipping} className="space-y-4">
+              <p className="rounded-lg bg-cream/60 px-3 py-2 text-xs text-charcoal/60">
+                Uses the AusPost eParcel Shipping &amp; Tracking API. Enter your developer
+                portal username, password and 10-digit charge account number.
+              </p>
               <div>
                 <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-charcoal/60">
-                  AusPost API Key
+                  AusPost Username
+                </label>
+                <Input
+                  value={auspostUsername}
+                  onChange={(e) => setAuspostUsername(e.target.value)}
+                  placeholder="API username"
+                  autoComplete="off"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-charcoal/60">
+                  AusPost Password
                 </label>
                 <Input
                   type="password"
-                  value={auspostKey}
-                  onChange={(e) => setAuspostKey(e.target.value)}
-                  placeholder="Your AusPost API key"
+                  value={auspostPassword}
+                  onChange={(e) => setAuspostPassword(e.target.value)}
+                  placeholder="API password"
+                  autoComplete="off"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-bold uppercase tracking-wider text-charcoal/60">
+                  Charge Account Number
+                </label>
+                <Input
+                  value={auspostAccount}
+                  onChange={(e) => setAuspostAccount(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                  placeholder="10-digit account number"
+                  inputMode="numeric"
                 />
                 <p className="mt-1 text-xs text-charcoal/40">
-                  Get yours at auspost.com.au/business/developer-tools
+                  Your Australia Post eParcel charge account
                 </p>
               </div>
               <div>
